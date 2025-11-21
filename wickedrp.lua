@@ -1,7 +1,6 @@
--- Executor script for teleporting to all EmeraldSpawn parts with toggle GUI
-
 local player = game.Players.LocalPlayer
 local RunService = game:GetService("RunService")
+local TeleportService = game:GetService("TeleportService")
 
 -- GUI Setup
 local screenGui = Instance.new("ScreenGui")
@@ -10,8 +9,8 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 300, 0, 150)
-mainFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
+mainFrame.Size = UDim2.new(0, 300, 0, 200) -- Height increased for new button
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
 mainFrame.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
@@ -60,12 +59,22 @@ contentFrame.Parent = mainFrame
 local emeraldToggle = Instance.new("TextButton")
 emeraldToggle.Text = "Emerald Farm: OFF"
 emeraldToggle.Size = UDim2.new(0.8, 0, 0, 50)
-emeraldToggle.Position = UDim2.new(0.1, 0, 0.2, 0)
+emeraldToggle.Position = UDim2.new(0.1, 0, 0.1, 0)
 emeraldToggle.BackgroundColor3 = Color3.fromRGB(0, 100, 0)
 emeraldToggle.TextColor3 = Color3.new(1,1,1)
 emeraldToggle.Font = Enum.Font.GothamBold
 emeraldToggle.TextSize = 20
 emeraldToggle.Parent = contentFrame
+
+local serverHopButton = Instance.new("TextButton")
+serverHopButton.Text = "Server Hop"
+serverHopButton.Size = UDim2.new(0.8, 0, 0, 50)
+serverHopButton.Position = UDim2.new(0.1, 0, 0.5, 0)
+serverHopButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+serverHopButton.TextColor3 = Color3.new(1,1,1)
+serverHopButton.Font = Enum.Font.GothamBold
+serverHopButton.TextSize = 20
+serverHopButton.Parent = contentFrame
 
 -- Teleport logic
 local isFarming = false
@@ -95,7 +104,7 @@ local function farmEmeralds()
             if hrp and spawnPart and spawnPart:IsDescendantOf(workspace) then
                 hrp.CFrame = spawnPart.CFrame + Vector3.new(0, 3, 0)
             end
-            task.wait(.1)
+            task.wait(0.1)
         end
         task.wait(0.1)
     end
@@ -116,6 +125,11 @@ emeraldToggle.MouseButton1Click:Connect(function()
     end
 end)
 
+serverHopButton.MouseButton1Click:Connect(function()
+    local teleportOptions = Instance.new("TeleportOptions")
+    TeleportService:Teleport(game.PlaceId, player, teleportOptions)
+end)
+
 local isMinimized = false
 minimizeBtn.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
@@ -123,7 +137,7 @@ minimizeBtn.MouseButton1Click:Connect(function()
     if isMinimized then
         mainFrame.Size = UDim2.new(0, 300, 0, 30)
     else
-        mainFrame.Size = UDim2.new(0, 300, 0, 150)
+        mainFrame.Size = UDim2.new(0, 300, 0, 200)
     end
 end)
 
